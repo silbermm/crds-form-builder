@@ -1,0 +1,28 @@
+<div class="container">
+  <div id="form-one" class="col-md-12"> </div>
+
+  <div id="custom-form" class="col-md-12"> </div>
+</div>
+
+    <script>
+
+    var f = Formio.createForm(document.getElementById("form-one"), `https://mmpdfuvrztkytaa.form.io/<%= @form_path %>`);
+
+      console.log(f);
+  <%#var str = <%= raw @strForm <]%>
+  <%#var f = Formio.createForm(document.getElementById('custom-form'), str);%>
+  <%#console.log(f);%>
+    f.then(function(form) {
+      // Log the form schema.
+      console.log(form);
+      formio.saveSubmission({data: {
+        firstName: 'Joe',
+        lastName: 'Smith',
+        email: 'joe@example.com'
+    }}).then(function(submission) {
+      console.log(submission);
+    }).catch(function(e) {
+     console.log(e); 
+    });
+  });
+</script>

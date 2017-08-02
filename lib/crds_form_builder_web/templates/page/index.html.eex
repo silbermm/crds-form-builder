@@ -1,0 +1,7 @@
+<div class="jumbotron">
+  <h2><%= gettext "Welcome to %{name}!", name: "FormBuilder" %></h2>
+</div>
+
+<div class="container">
+  <div id="custom-form" class="col-md-12"> </div>
+</div>
