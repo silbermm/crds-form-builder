@@ -14,6 +14,13 @@ config :crds_form_builder, CrdsFormBuilderWeb.Endpoint,
   watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
                     cd: Path.expand("../assets", __DIR__)]]
 
+config :crds_form_builder, 
+  api_host: System.get_env("CRDS_FORM_BUILDER_DATA_HOST"),
+  api_username: System.get_env("CRDS_FORM_BUILDER_DATA_USERNAME"),
+  api_password: System.get_env("CRDS_FORM_BUILDER_DATA_PASSWORD"),
+  api_client_id: System.get_env("CRDS_FORM_BUILDER_DATA_CLIENT_ID"),
+  api_client_secret: System.get_env("CRDS_FORM_BUILDER_DATA_CLIENT_SECRET")
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

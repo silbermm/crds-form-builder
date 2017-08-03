@@ -6,6 +6,8 @@
 use Mix.Config
 
 # Configures the endpoint
+config :ssl, protocol_version: :"tlsv1.2"
+
 config :crds_form_builder, CrdsFormBuilderWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "2nGArNtC875E/b9F1Aazv+amiPlkAg37UkJGpmPDXuYDqxSU8nQfp75wj2oH/myd",
