@@ -4,13 +4,15 @@ defmodule CrdsFormBuilder.FormIOTest do
 
   doctest FormIO
 
+  alias FormIO.FieldDescriptor
+
   describe "extract_data_fields" do
     test "one field with data properties" do
       component = [%{"properties" => 
         %{"data_field" => "First_Name", "data_table" => "Contacts"}
       }]
       result = FormIO.extract_data_fields(component)
-      assert result == %{"Contacts" => ["First_Name"]}
+      assert result == %{"Contacts" => [%FieldDescriptor{name: "First_Name", single: true}]}
     end
 
     test "multiple fields with different data properties" do
@@ -20,7 +22,7 @@ defmodule CrdsFormBuilder.FormIOTest do
         %{"data_field" => "Household_Name", "data_table" => "Household"}
       }]
       result = FormIO.extract_data_fields(component)
-      assert result == %{"Contacts" => ["First_Name"], "Household" => ["Household_Name"]}
+      assert result == %{"Contacts" => [%FieldDescriptor{name: "First_Name", single: true}], "Household" => [%FieldDescriptor{name: "Household_Name", single: true}]}
     end
 
     test "multiple fields with same table" do
@@ -30,7 +32,7 @@ defmodule CrdsFormBuilder.FormIOTest do
         %{"data_field" => "Last_Name", "data_table" => "Contacts"}
       }]
       result = FormIO.extract_data_fields(component)
-      assert result == %{"Contacts" => ["First_Name", "Last_Name"]}
+      assert result == %{"Contacts" => [%FieldDescriptor{name: "First_Name", single: true}, %FieldDescriptor{name: "Last_Name", single: true}]}
     end
   end
 

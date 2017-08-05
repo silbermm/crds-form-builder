@@ -12,31 +12,27 @@ defmodule MinistryPlatform do
   @client_secret Application.get_env(:crds_form_builder, :api_client_secret)
 
   @doc """
-  Takes a map of Tables -> [ Fields ] and queries Ministry Platform for the 
-  Data.
+  Wrapper for the Ministry Platform GET Api call
   """
-  def form_data(mp_map) do
-    {:ok, auth_token} = authenticate()
-    mp_map
-    |> Map.keys
-    |> Enum.reduce(%{}, fn(table, acc) ->
-      selectColumns  = mp_map
-                       |> Map.get(table)
-                       |> Enum.join(",")
-      response = map_response(get(table, selectColumns, "Contact_ID=2186211", auth_token))
-      Map.update(acc, table, [response], &(&1 ++ [response]))
+  def get(table, selectColumns, filter, auth_token) do
+    Task.Supervisor.async(CrdsFormBuilder.TaskSupervisor, fn ->
+      HTTPoison.get(
+        "#{@host}/ministryplatformapi/tables/#{table}?$select=#{selectColumns}&$filter=#{filter}",
+        %{"Authorization" => "Bearer #{auth_token}"})
     end)
   end
 
   @doc """
-  Wrapper for the Ministry Platform GET Api call
+  Takes the Http response from making a Ministry Platform rest call and tries to decode it 
+  into a map or list of maps. If the result of the Http call is an error, returns an :error.
   """
-  def get(table, selectColumns, filter, auth_token) do
-    HTTPoison.get(
-      "#{@host}/ministryplatformapi/tables/#{table}?$select=#{selectColumns}&$filter=#{filter}",
-      %{"Authorization" => "Bearer #{auth_token}"}
-    )
+  @spec map_response({:ok, HTTPoison.Response.t} | {:error, HTTPoison.Error}) :: map() | list() | :error
+  def map_response({:ok, %HTTPoison.Response{body: body, status_code: 200}}) do
+    body
+    |> Poison.decode!
+    |> List.first
   end
+  def map_response(_response), do: :error
 
   @doc """
   Authenticate with Ministry Platform. 
@@ -46,14 +42,14 @@ defmodule MinistryPlatform do
   def authenticate() do
     response = HTTPoison.post(
       "#{@host}/ministryplatform/oauth/token",
-      get_auth_body,
+      get_auth_body(),
       %{"Content-type" => "application/x-www-form-urlencoded"}
     )
     case response do
       {:ok, %HTTPoison.Response{"status_code": 200, "body": body}} ->
         token = Poison.Parser.parse!(body)
         {:ok, Map.get(token, "access_token")}
-      _ = err ->
+      _ = _err ->
         {:error, "unable to authenticate"}
     end
   end
@@ -66,13 +62,4 @@ defmodule MinistryPlatform do
      "&client_secret=#{@client_secret}",
      "&grant_type=password"] |> Enum.join
   end
-
-  defp map_response({:ok, %HTTPoison.Response{body: body, status_code: 200}} = response) do
-    body
-    |> Poison.decode!
-    |> List.first
-  end
-
-  defp map_response(response), do: :error
-
 end

@@ -10,6 +10,7 @@ defmodule CrdsFormBuilder.Application do
     children = [
       # Start the endpoint when the application starts
       supervisor(CrdsFormBuilderWeb.Endpoint, []),
+      supervisor(Task.Supervisor, [[name: CrdsFormBuilder.TaskSupervisor]]),
       # Start your own worker by calling: CrdsFormBuilder.Worker.start_link(arg1, arg2, arg3)
       # worker(CrdsFormBuilder.Worker, [arg1, arg2, arg3]),
     ]
