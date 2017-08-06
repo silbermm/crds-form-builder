@@ -10,20 +10,49 @@ defmodule MinistryPlatform do
   @host Application.get_env(:crds_form_builder, :api_host)
   @client_id Application.get_env(:crds_form_builder, :api_client_id)
   @client_secret Application.get_env(:crds_form_builder, :api_client_secret)
-
+ 
   @doc """
   Wrapper for the Ministry Platform GET Api call
+  Takes optional keyword list of options:
+    [ select_columns: "The_columsn_to_select",
+      filter: "The filter to apply"
+    ]
   """
-  def get(table, selectColumns, filter, auth_token) do
+  def get(table, auth_token, [select_columns: select_columns, filter: filter]) do
     Task.Supervisor.async(CrdsFormBuilder.TaskSupervisor, fn ->
       HTTPoison.get(
-        "#{@host}/ministryplatformapi/tables/#{table}?$select=#{selectColumns}&$filter=#{filter}",
+        "#{@host}/ministryplatformapi/tables/#{table}?$select=#{select_columns}&$filter=#{filter}",
         %{"Authorization" => "Bearer #{auth_token}"})
+      |> map_response
+    end)
+  end
+  def get(table, auth_token, [select_columns: select_columns]) do
+    Task.Supervisor.async(CrdsFormBuilder.TaskSupervisor, fn ->
+      HTTPoison.get(
+        "#{@host}/ministryplatformapi/tables/#{table}?$select=#{select_columns}",
+        %{"Authorization" => "Bearer #{auth_token}"})
+      |> map_response
+    end)
+  end
+  def get(table, auth_token, [filter: filter]) do
+    Task.Supervisor.async(CrdsFormBuilder.TaskSupervisor, fn ->
+      HTTPoison.get(
+        "#{@host}/ministryplatformapi/tables/#{table}?$filter=#{filter}",
+        %{"Authorization" => "Bearer #{auth_token}"})
+      |> map_response
+    end)
+  end
+  def get(table, auth_token) do
+    Task.Supervisor.async(CrdsFormBuilder.TaskSupervisor, fn ->
+      HTTPoison.get(
+        "#{@host}/ministryplatformapi/tables/#{table}",
+        %{"Authorization" => "Bearer #{auth_token}"})
+      |> map_response
     end)
   end
 
   @doc """
-  Takes the Http response from making a Ministry Platform rest call and tries to decode it 
+  Takes the Http response from making a Ministry Platform rest call and tries to decode it
   into a map or list of maps. If the result of the Http call is an error, returns an :error.
   """
   @spec map_response({:ok, HTTPoison.Response.t} | {:error, HTTPoison.Error}) :: map() | list() | :error
@@ -35,8 +64,7 @@ defmodule MinistryPlatform do
   def map_response(_response), do: :error
 
   @doc """
-  Authenticate with Ministry Platform. 
-
+  Authenticate with Ministry Platform.
   Returns a Token that can be used in subsequent calls to the API
   """
   def authenticate() do
