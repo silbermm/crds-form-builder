@@ -14,30 +14,21 @@ defmodule MinistryPlatform do
   @doc """
   Wrapper for the Ministry Platform GET Api call
   Takes optional keyword list of options:
-    [ select_columns: "The_columsn_to_select",
-      filter: "The filter to apply"
-    ]
+    `[ select: "The_columns_to_select",
+       filter: "The filter to apply",
+       etc...
+     ]`
   """
-  def get(table, auth_token, [select_columns: select_columns, filter: filter]) do
+  def get(table, auth_token, opts) do
     Task.Supervisor.async(CrdsFormBuilder.TaskSupervisor, fn ->
+      string_opts = opts
+                    |> Keyword.keys
+                    |> Enum.reduce("", fn(key, acc) ->
+                      val = opts |> Keyword.get(key)
+                      acc <> "&$#{key}=#{val}"
+                    end)
       HTTPoison.get(
-        "#{@host}/ministryplatformapi/tables/#{table}?$select=#{select_columns}&$filter=#{filter}",
-        %{"Authorization" => "Bearer #{auth_token}"})
-      |> map_response
-    end)
-  end
-  def get(table, auth_token, [select_columns: select_columns]) do
-    Task.Supervisor.async(CrdsFormBuilder.TaskSupervisor, fn ->
-      HTTPoison.get(
-        "#{@host}/ministryplatformapi/tables/#{table}?$select=#{select_columns}",
-        %{"Authorization" => "Bearer #{auth_token}"})
-      |> map_response
-    end)
-  end
-  def get(table, auth_token, [filter: filter]) do
-    Task.Supervisor.async(CrdsFormBuilder.TaskSupervisor, fn ->
-      HTTPoison.get(
-        "#{@host}/ministryplatformapi/tables/#{table}?$filter=#{filter}",
+        "#{@host}/ministryplatformapi/tables/#{table}?#{string_opts}",
         %{"Authorization" => "Bearer #{auth_token}"})
       |> map_response
     end)
