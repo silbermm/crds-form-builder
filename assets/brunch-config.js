@@ -47,6 +47,15 @@ exports.config = {
     babel: {
       // Do not use ES6 compiler in vendor code
       ignore: [/vendor/]
+    },
+    copycat: {
+      "assets" : ["node_modules/crds-styles/assets/svgs"],
+      "fonts": ["node_modules/bootstrap-sass/assets/fonts/bootstrap"]
+    },
+    sass: {
+      options: {
+        includePaths: ['node_modules/crds-styles/assets/stylesheets', 'node_modules/bootstrap-sass/assets/stylesheets']
+      }
     }
   },
 

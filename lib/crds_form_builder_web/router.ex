@@ -16,6 +16,7 @@ defmodule CrdsFormBuilderWeb.Router do
   scope "/", CrdsFormBuilderWeb do
     pipe_through :browser # Use the default browser stack
 
+    get "/login", SessionController, :login
     get "/form/*form_path", FormController, :index
     get "/", PageController, :index
   end

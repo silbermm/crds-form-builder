@@ -1,0 +1,52 @@
+<div class="sr-bg imgix-fluid-bg img-background ng-scope" 
+     data-src="//crds-cms-uploads.imgix.net/content/images/register-bg.jpg" 
+     style="background-image: url(&quot;https://crds-cms-uploads.imgix.net/content/images/register-bg.jpg?dpr=1.90&amp;ixjsv=2.2.3&amp;q=52&amp;w=1510&quot;);"> 
+  
+  <div class="sr-wrapper">
+    <div class="container"> 
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 text-center push-top"> 
+          <a href="/">
+            <svg viewBox="0 0 45 45" class="icon icon-xxlarge icon-screwhead">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                     xlink:href="https://www.crossroads.net/signin#screwhead">
+              </use>
+            </svg>
+          </a>
+          <h1 class="white push-bottom">Login</h1>
+        </div>
+        <div class="col-sm-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+          <div class="panel animated fadeIn">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-6 hidden-xs">
+                  <div class="row">
+                    <div class="col-sm-10 col-sm-offset-1">
+                      <div>
+                        <h4 class="flush-bottom flush-top ng-scope">Join the Community</h4>
+                        <p class="text-muted push-bottom ng-scope">
+                          <span> 
+                            Get involved. Sign up to serve. Join a group. GO somewhere.
+                          </span>
+                        </p>
+                        <h4 class="flush-bottom ng-scope">Give to Crossroads</h4>
+                        <p class="text-muted push-bottom ng-scope">Set up a recurring gift and view your financial history with Crossroads.
+                        </p>
+                        <h4 class="flush-bottom ng-scope">Manage Your Profile</h4>
+                        <p class="text-muted push-bottom">
+                          We want to know who you are. Tell us about yourself.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
