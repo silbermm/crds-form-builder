@@ -9,6 +9,7 @@ defmodule CrdsFormBuilder.Mixfile do
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       start_permanent: Mix.env == :prod,
+      dialyzer: [plt_add_deps: :transitive],
       deps: deps()
     ]
   end
@@ -39,7 +40,8 @@ defmodule CrdsFormBuilder.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
-      {:mock, "~> 0.2.0", only: :test}
+      {:mock, "~> 0.2.0", only: :test},
+      {:dialyxir, "~> 0.5", only: [:dev], runtime: false}
     ]
   end
 end

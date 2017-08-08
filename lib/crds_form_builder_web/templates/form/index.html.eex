@@ -5,8 +5,8 @@
 </div>
 
 <script>
-    var form = new FormioForm(document.getElementById('custom-form'));
-    form.form = <%= raw @str_form %>;
-    form.src = `https://crossroads.form.io/<%= @form_path %>`;
-    form.submission = <%= raw @submission_data %>
+  var form = new FormioForm(document.getElementById('custom-form'));
+  form.form = <%= raw @str_form %>;
+  form.src = `https://crossroads.form.io/<%= @form_path %>`;
+  form.submission = <%= raw @submission_data %>
 </script>

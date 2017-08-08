@@ -8,20 +8,34 @@ defmodule FormIO do
   @data_adaptor Application.get_env(:formio, :adapator, FormIO.MinistryPlatform.Adaptor)
 
   @doc """
-  Given a FormIO Form Map, get data from the configured datasource
+  Given a FormIO Form map, get data from the configured datasource
   and build a map of submission data.
   """
-  def get_data_to_populate_form(formio_form) do
+  @spec fetch_data_to_prepopulate_form(map()) :: Task.t
+  def fetch_data_to_prepopulate_form(formio_form) do
     Task.Supervisor.async(CrdsFormBuilder.TaskSupervisor, fn ->
       flattened_components = formio_form
                              |> Map.get("components")
-                             |> flatten_components()
+                             |> flatten_components
 
       flattened_components
       |> extract_data_fields()
       |> @data_adaptor.fetch_field_data
       |> build_submission_data(flattened_components)
       |> Poison.encode!
+    end)
+  end
+
+  @doc """
+  Given a FormIO Form map, get the dropdown values from the
+  configured datasource
+  """
+  def fetch_data_to_populate_dropdowns(formio_form) do
+    Task.Supervisor.async(CrdsFormBuilder.TaskSupervisor, fn ->
+      flattened_components = formio_form
+                             |> Map.get("components")
+                             |> flatten_components
+
     end)
   end
 
